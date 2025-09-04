@@ -21,7 +21,7 @@
 	- [3.2 Training of each Tree](#32-training-of-each-tree)
 	- [3.3 Pseudocode of hyperparameter calculation](#33-pseudocode-of-hyperparameter-calculation)	
 - [4. How is testing performed](#4-how-is-testing-performed)
-	- [4.1 Critical questions to ask ourselves](#41-critical-questions-to-ask-ourselves)
+- [5 How to choose the hyperparameters of Regression Forrests](#5-how-to-choose-the-hyperparameters-of-regression-forrests)
 
 
 ## Overview
@@ -154,7 +154,7 @@ $$
 
 
 
-### 4.1 Critical questions to ask ourselves
+### 5 How to choose the hyperparameters of Regression Forrests
 * During the detailed evaluation of the algorithm, we need to answer the following questions:
 
   1. What is the **optimal number of Clusters**, or equivalently, what is the **minimum possible distance** between two centers?
