@@ -22,7 +22,7 @@
 	- [3.3 Pseudocode of hyperparameter calculation](#33-pseudocode-of-hyperparameter-calculation)	
 - [4. How is testing performed](#4-how-is-testing-performed)
 - [5 How to choose the hyperparameters of Regression Forrests](#5-how-to-choose-the-hyperparameters-of-regression-forrests)
-
+- [6 References to literature/publications](#6-references-to-literature-publications)
 
 ## Overview
 * This project experiment on the hyperparameters of the algorithm **Regression Forrest** regarding the ***Gaze Recognition problem***.
@@ -188,7 +188,7 @@ $$
 
 
 
-## References to literature/publications:
+### 6 References to literature/publications
 
 [^1]: Breiman, L., Friedman, J.,Olshen, R., and Stone, C. [1984] Classification and Regression Trees,  Wadsworth
 [^2]: Y. Sugano, Y. Matsushita, and Y. Sato. Learning-by-synthesis for appearance-based 3d gaze estimation.
