@@ -1,14 +1,9 @@
 # Regression Forrests algorithm from Scratch in C 
 
 
-<html>
-<body style="background: url(/home/oly/MPIIGaze/markdown/gazeview.jpg) no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;">
-</body>
-</html>
+<p align="left">
+  <img src="imgs/regression_forrests.png" alt="???" width="450" height="400"/>
+</p>
 
 ## Experiment on ***Regression Forrest*** hyperparams for the Gaze Recognition problem
 
