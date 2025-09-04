@@ -13,23 +13,18 @@
 ## Experiment on ***Regression Forrest*** hyperparams for the Gaze Recognition problem
 
 ## Table of Contents
-- [Overview of the project](##Overview)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Features](#features)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+- [Overview](#overview)
+- [1. Data Collection](#1-data-collection)
+- [2. Algorithm Implementation](#2-algorithm-implementation)
+- [3. Training of Regression Forrest](#3-training-of-regression-forrest)
 
-
-
-## Overview of the project
+## Overview
 * This project experiment on the hyperparameters of the algorithm **Regression Forrest** regarding the ***Gaze Recognition problem***.
 * Aim of this project are multiple. It began just to gain some experience in one of the best unsupervised algorithms, the Regression Forests. So the best way to learn it is to implement it "from scratch" (it is Regression instead of Decision, since our problem isn't classification but regression.)
 * After implementing the prototype in Matlab, we moved forward with a multithreaded C/C++ version in order to achieve parallelism.
 * Finally, we verify the correctness of our implementation with the accuracy that the bibliography achieves using the same algorithm/datasets.
 
-## Step1: Data Collection
+## 1. Data Collection
 
 * As data, we chose <a href="https://www.mpi-inf.mpg.de/de/abteilungen/computer-vision-and-multimodal-computing/research/gaze-based-human-computer-interaction/appearance-based-gaze-estimation-in-the-wild-mpiigaze/"
 target="_blank">MPIIGaze Dataset</a> [^3]. However, there are also other datasets, such as <a href="https://www.idiap.ch/dataset/eyediap" target="_blank">Eyediap</a> and <a href="http://www.hci.iis.u-tokyo.ac.jp/datasets/" target="_blank">Multiview Dataset</a> [^2].
@@ -52,15 +47,7 @@ target="_blank">MPIIGaze Dataset</a> [^3]. However, there are also other dataset
   	 - Both of these angles range within [-30, +30] degrees.
 * For the Random Forest algorithm, we reshape the eye images from (W,H) = (60,36) to (15,9) for both training and testing.
 
-
-
-
-
-
-
-
-
-## Step 2: Algorithm Implementation
+## 2. Algorithm Implementation
 
 * For the implementation of the algorithm, we based on Breiman's origin implementation [^1], making some changes to the way we choose the **features** during the split.
 * In our case, we first group the training samples into **P pose clusters**, based on the **Head Pose**:
@@ -76,13 +63,10 @@ target="_blank">MPIIGaze Dataset</a> [^3]. However, there are also other dataset
 
 
 
-
-## Construction of the forest using Regression Decision Trees 
+## 3. Training of Regression Forrest 
 
 * I use the **bootstrap procedure**, randomly selecting inputs.
-
 * We create as many **trees** as there are **Pose Clusters**, that is, P.
-
 * Each tree receives training data from the **R-nearest Clusters**, i.e., the R clusters with the **closest Head Poses**
   με τα __κοντινότερα__ Head Poses
 * As the **error**, we take the **mean gaze error** from all the regression trees.
