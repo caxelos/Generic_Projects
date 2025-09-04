@@ -17,8 +17,12 @@
 - [1. Data Collection](#1-data-collection)
 - [2. Split data into clusters](#2-split-data-into-clusters)
 - [3. Training of Regression Forrest](#3-training-of-regression-forrest)
-	- [3.1 Training of each Tree](#31-training-of-each-tree)
+	- [3.1 Each cluster is a tree](#31-each-cluster-is-a-tree)
+	- [3.2 Training of each Tree](#32-training-of-each-tree)
+	- [3.3 Pseudocode of hyperparameter calculation](#33-pseudocode-of-hyperparameter-calculation)	
 - [4. How is testing performed](#4-how-is-testing-performed)
+	- [4.1 Critical questions to ask ourselves](#41-critical-questions-to-ask-ourselves)
+
 
 ## Overview
 * This project experiment on the hyperparameters of the algorithm **Regression Forrest** regarding the ***Gaze Recognition problem***.
@@ -67,6 +71,7 @@ target="_blank">MPIIGaze Dataset</a> [^3]. However, there are also other dataset
 
 ## 3. Training of Regression Forrest 
 
+### 3.1 Each cluster is a tree
 * I use the **bootstrap procedure**, randomly selecting inputs.
 * We create as many **trees** as there are **Pose Clusters**, that is, P.
 * Each tree receives training data from the **R-nearest Clusters**, i.e., the R clusters with the **closest Head Poses**
@@ -84,8 +89,7 @@ target="_blank">MPIIGaze Dataset</a> [^3]. However, there are also other dataset
 
 
 
-### 3.1 Training of each Tree
-
+### 3.2 Training of each Tree
 
 * At **each node** of a tree, we try to **learn functions** of the form:
 
@@ -99,7 +103,7 @@ $$
 	a. if $$ __f < τ__ $$, then the training sample is directed to the __left subtree__.
 	b. if $$ __f >= τ__ $$, then the training sample is directed to the __right subtree__.
 
-
+### 3.3 Pseudocode of hyperparameter calculation
 * The algorithm we use to determine the **optimal pixels** and the **optimal threshold** for the split at **each node** of the tree is the **minimum residual sum of squares**.
 
 $$
@@ -141,6 +145,7 @@ $$
 
 ## 4. How is testing performed
 
+
 * When we want to test a sample, we do not send it to all the trees, but only to the **R-nearest trees** based on the head pose.
 
 * We then compute the **average error** from the R-nearest regression trees.
@@ -148,9 +153,8 @@ $$
 * We are also interested in the **standard deviation**, to see **how close** our predictions are to the **mean error**.
 
 
-## Evaluation of our algorithm
 
-
+### 4.1 Critical questions to ask ourselves
 * During the detailed evaluation of the algorithm, we need to answer the following questions:
 
   1. What is the **optimal number of Clusters**, or equivalently, what is the **minimum possible distance** between two centers?
