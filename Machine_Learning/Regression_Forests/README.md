@@ -15,7 +15,7 @@
 ## Table of Contents
 - [Overview](#overview)
 - [1. Data Collection](#1-data-collection)
-- [2. Algorithm Implementation](#2-algorithm-implementation)
+- [2. Split data into clusters](#2-split-data-into-clusters)
 - [3. Training of Regression Forrest](#3-training-of-regression-forrest)
 	- [3.1 Training of each Tree](#31-training-of-each-tree)
 
@@ -49,7 +49,7 @@ target="_blank">MPIIGaze Dataset</a> [^3]. However, there are also other dataset
   	 - Both of these angles range within [-30, +30] degrees.
 * For the Random Forest algorithm, we reshape the eye images from (W,H) = (60,36) to (15,9) for both training and testing.
 
-## 2. Algorithm Implementation
+## 2. Split data into clusters
 
 * For the implementation of the algorithm, we based on Breiman's origin implementation [^1], making some changes to the way we choose the **features** during the split.
 * In our case, we first group the training samples into **P pose clusters**, based on the **Head Pose**:
@@ -60,7 +60,7 @@ target="_blank">MPIIGaze Dataset</a> [^3]. However, there are also other dataset
 
 <div id="foto" style="text-align: center;">
    <img src="imgs/centers.jpg"  alt="foto1">
-   <figcaption><i>Diagram illustrating the **Head Poses** of all points in the Training Phase. The cluster centers are shown in green, while the remaining points are shown in blue. The above figure uses **44,640** training samples, with the centers being at a distance **greater than 0.03** radians (1.718873 degrees) from each other.</i></figcaption>
+   <figcaption>Diagram illustrating the **Head Poses** of all points in the Training Phase. The cluster centers are shown in green, while the remaining points are shown in blue. The above figure uses **44,640** training samples, with the centers being at a distance **greater than 0.03** radians (1.718873 degrees) from each other.</figcaption>
 </div>
 
 
