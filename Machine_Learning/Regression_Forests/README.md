@@ -75,38 +75,37 @@ target="_blank">MPIIGaze Dataset</a> [^3]. However, there are also other dataset
 
 <div id="foto" style="text-align: center;">
    <img src="centers.jpg"  alt="foto1">
-   <figcaption><i>Διάγραμμα που απεικονίζει τα  <b>Head Poses</b> όλων των σημείων του Training Phase. Με <b>πράσινο</b> χρώμα απεικονίζονται τα κέντρα των Clusters, ενώ με <b>μπλέ</b> χρώμα τα υπόλοιπα σημεία. Η παραπάνω εικόνα χρησιμοποιεί <b>44640</b> training δείγματα, ενώ τα <b>κέντρα</b> απέχουν μεταξύ τους απόσταση <b>μεγαλύτερη</b> των <b>0.03 radians</b>(1.718873) μοίρες)</i></figcaption>
+   <figcaption><i>Diagram illustrating the **Head Poses** of all points in the Training Phase. The cluster centers are shown in green, while the remaining points are shown in blue. The above figure uses **44,640** training samples, with the centers being at a distance **greater than 0.03** radians (1.718873 degrees) from each other.</i></figcaption>
 </div>
 
 
 
 
-## Κατασκευή του δάσους μέσα από Regression Decision Trees
+## Construction of the forest using Regression Decision Trees 
 
-* Χρησιμοποιώ την __bootstrap__ διαδικασία, επιλέγοντας τυχαία inputs
+* I use the **bootstrap procedure**, randomly selecting inputs.
 
-* Δημιουργούμε τόσα __δέντρα__, όσα και τα __Pose Clusters__, δηλαδή P
+* We create as many **trees** as there are **Pose Clusters**, that is, P.
 
-* Κάθε δέντρο παίρνει training data από τα __R-nearest Clusters__. Δηλαδή R Clusters
+* Each tree receives training data from the **R-nearest Clusters**, i.e., the R clusters with the **closest Head Poses**
   με τα __κοντινότερα__ Head Poses
-
-* Ως __error__ παίρνουμε το __μέσο gaze error__ από όλα τα regression trees.
+* As the **error**, we take the **mean gaze error** from all the regression trees.
 
 
 
 <div id="foto" style="text-align: center;">
    <img src="visualization.jpeg" width="400" alt="foto1">
-   <figcaption><i>Παράδειγμα όπου <b>γειτονικά Clusters</b> συνεισφέρουν στην κατασκευή ενός δέντρου. Στα Clusters ανοίκουν δείγματα με <b>παρόμοια Head Poses</b></i></br></figcaption>
+   <figcaption><i>Example where <b>neighbouring Clusters</b> contribute to the construction of a tree. The Clusters contain samples with <b>similar Head Poses</b></i></br></figcaption>
 </div>
 
 
 
 
 
-## Πώς εκπαιδεύεται το κάθε δέντρο
+## Training of each Tree
 
 
-* Σε κάθε κόμβο ενός δέντρου, προσπαθούμε να μάθουμε __συναρτήσεις__ της μορφής
+* At **each node** of a tree, we try to **learn functions** of the form:
 
 $$
     f = px1 - px2
@@ -115,17 +114,15 @@ $$
 
 
 
-* Τα px1, px2 είναι οι __Gray__ τιμές από 2 pixel της eye Image (W=15,H=9).
+* Where, **px1, px2** are the ***Gray values*** of 2 pixels from the  eye Image (W=15,H=9).
 
-* Τα __pixels__ αυτά μαθαίνονται μέσα από το training. Επίσης προσπαθούμε να
-  "μάθουμε" το __βέλτιστο threshold τ__ για κάθε κόμβο, όπου:
+* These pixels are learned during training. We also try to learn the __optimal threshold__for each node, where:
 
-	a. αν $$ __f < τ__ $$, τότε το training sample κατευθύνεται στο __αριστερό__ υποδέντρο
-	b. αν $$ __f >= τ__ $$, τότε κατευθύνεται στο __δεξιό__ υποδέντρο
+	a. if $$ __f < τ__ $$, then the training sample is directed to the __left subtree__.
+	b. if $$ __f >= τ__ $$, then the training sample is directed to the __right subtree__.
 
 
-* Ο αλγόριθμος με τον οποίο υπολογίζουμε ποια είναι τα __βέλτιστα pixels__ και το __βέλτιστο threshold__ για το split σε __κάθε κόμβο__ του δέντρου είναι το __minimum residual sum of squares__
-
+* The algorithm we use to determine the **optimal pixels** and the **optimal threshold** for the split at **each node** of the tree is the **minimum residual sum of squares**.
 
 $$
 \begin{align}
@@ -135,36 +132,30 @@ $$
 \end{align}
 $$
 
-* Τα $nleft$ και $nright$ είναι ο __αριθμός__ των δειγμάτων που θα είχε κάθε υποδέντρο, σε περίπτωση που γινόταν το split με βάση τα $px1$,$px2$,$thres$
+* The $nleft$ and $nright$ are the **number of samples** that each subtree would have if the split were made based on ***px1, px2 and thres***.
 
 
-* Τα  $\hat{ m_{right} }$ και $\hat{ m_{left} }$ είναι η __μέση τιμή__ των gazes που ανήκουν στο __δεξί__ και __αριστερό__ υποδέντρο
+* The $\hat{ m_{right} }$ and $\hat{ m_{left} }$ are the __mean values__ of the gazes that belong to the __right__ and __left__ subtrees, respectively.
 
 
-* Διαλέγουμε τα $px1$,$px2$,$thres$ που __ελαχιστοποιούν__ το παραπάνω άθροισμα
+* We choose **px1, px2 and thres*** that **minimize** the above sum.
 
 <div id="foto" style="text-align: center;">
    <img src="stigmiotupo.png" alt="foto1">
-    <figcaption><i>Στιγμιότυπο υποδέντρου <b>10 δειγμάτων</b>. Ανάλογα με τις τιμές των <b>Pixel</b> του δείγματος, το τελευταίο θα οδηγηθεί σε έναν <b>τερματικό κόμβο</b>(φύλλο)</i></br></br> </figcaption>
+    <figcaption><i>Snapshot of a subtree with <b>10 samples</b>. Depending on the values of the samples's <b>Pixels</b>, it will be directed to a <b>terminal node</b>(leaf)</i></br></br> </figcaption>
 </div>
 
 
-* Ο τρόπος μάθησης των στοιχείων διαχωρισμού περιγράφεται παρακάτω:
+* The method for learning the split elements is described below:
+	1. For every possible pair of pixels (px1, px2)
+		2. For every possible threshold
+			3. Compute the **rightError** as ***the sum of squares error in the right subtree***  
+			4. Respectively for the **leftError**
+			5. Error = rightError + leftError
+			6. ***If Error < minError ***
+				7. minError = Error; minPx1 = px1; minPx2 = px2; minThreshold = threshold
 
-
-	1. _Για κάθε δυνατό ζευγάρι pixel(px1,px2)_
-		2. _Για κάθε threshold_
-			3. _Υπολόγισε το rightError= sum of squares error στο δεξί υποδέντρο_  
-			4. _Υπολόγισε το leftError για το αριστερό υποδέντρο_
-			5. _Error = rightError + leftError_
-			6. _Αν Error < minError_
-				7. _minError = Error_
-				8. _minPx1 = px1_
-				9. _minPx2 = px2_
-				10. _minThreshold = threshold_
-
-
-* Οπότε έτσι μαθαίνουμε τα  minPx1, minPx2, minThreshold κάθε κόμβου
+* So that's how we learn via training the **minPx1, minPx2** of each node
 
 
 
@@ -173,53 +164,51 @@ $$
 ## Πώς γίνεται το testing
 
 
-* Μόλις θέλουμε να ελέγξουμε ένα testing sample, δεν το στέλνουμε σε όλα τα
-  δέντρα, αλλά στα __R-nearest δέντρα__ με βάσει το head pose
+* When we want to test a sample, we do not send it to all the trees, but only to the **R-nearest trees** based on the head pose.
 
-* Τότε υπολογίζουμε το __average error__ από τα R-nearest regression δέντρα.
+* We then compute the **average error** from the R-nearest regression trees.
 
-* Μας ενδιαφέρει ωστόσο να γνωρίζουμε και την __τυπική απόκλιση__(standard deviation), για να βλέπουμε __πόσο κοντά__ είναι οι προβλέψεις μας στο __mean error__
+* We are also interested in the **standard deviation**, to see **how close** our predictions are to the **mean error**.
 
 
 ## Πειραματική Αξιολόγηση Αλγορίθμου
 
 
 
-* Κατά την αναλυτική αξιολόγηση του Αλγορίθμου θα πρέπει να απαντήσουμε τα εξής ερωτήματας:
+* During the detailed evaluation of the algorithm, we need to answer the following questions:
 
+  1. What is the **optimal number of Clusters**, or equivalently, what is the **minimum possible distance** between two centers?
 
-  1. Ποιός είναι ο βέλτιστος __αριθμός__ από __Clusters__ ή ισοδύναμα ποιά θα είναι η __μικρότερη δυνατή απόσταση__ μεταξύ 2 κέντρων
+  2. What is the **optimal number of training samples**?
 
-  2. Ποιός είναι ο βέλτιστος __αριθμός δειγμάτων__ εκπαίδευσης
+  3. What is the **optimal number of neighbors** for each Cluster?
 
-  3. Ποιός είναι ο βέλτιστος __αριθμός γειτόνων__ κάθε Cluster
+  4. During the creation of subtrees in a tree, how many **split variables** do we use?
 
-  4. Κατά τη διαδικασία δημιουργίας υποδέντρων σε ένα δέντρο, πόσες __μεταβλητές διαχωρισμού__ χρησιμοποιούμε?
+  4. How **deep** should each tree be?
 
-  4. Πόσο __βάθος__ πρέπει να έχει το κάθε δέντρου
-
-  5. Αν σε ένα δέντρο καταλήξουμε σε φύλλο όπου υπάρχουν  __παραπάνω από ένα__ δείγματα, πώς προσδιορίζεται η 2d-gaze του συγκεκριμένου δέντρου
-
-
-
-##### Ερώτημα 1ο: Εύρεση μικρότερης απόστασης Κέντρων/Αριθμός Clusters
-
-
-* Επειδή δεν έχουμε υπολογίσει ακόμα τον __βέλτιστο αριθμό γειτόνων__, θεωρώ αρχικά πως __R = 5__ γείτονες.
-
-* Επίσης, για να μειώσω τον χρόνο εκπαίδευσης, χρησιμοποιώ αρχικά __10,000 training samples__
-
-* Ο αριθμός των __μεταβλητών διαχωρισμού__ που θα χρησιμοποιούσαμε είναι WIDTH*HEIGHT*THRESHOLD_RANGE = 15*16*255. Επειδή ο αριθμός αυτός είναι υπερβολικά μεγάλος, σύμφωνα με το paper του Breiman θα χρησιμοποιήσουμε την __τετραγωνική ρίζα__ αυτού του αριθμού
-
-* Τέλος, αν ένα φύλλο ενός δέντρου περιέχει __παραπάνω από ένα__ training samples, υπολογίζω απλώς τον __μέσο όρο__ των __2-d gazes__ και προκύπτει ένα 2d-gaze διάνυσμα
-
-* Δεν περιορίζουμε το βάθος του κάθε δέντρου
-
-* Με βάση τα παραπάνω, υπολογίζουμε το __mean error__ και το __standard deviation__
+  5. If a tree leaf contains **more than one** sample, how is the 2D gaze of that tree determined?
 
 
 
-## Aναφορές σε βιβλιογραφίες/δημοσιεύσεις
+##### Question 1: Finding Minimum Center Distance / Number of Clusters
+
+
+* Since we have not yet calculated the **optimal number of neighbors**, we initially assume **R = 5 neighbors**.
+
+* Also, to reduce training time, we initially use **10,000 training samples**.
+* 
+* The number of **split variables** we would use is WIDTH * HEIGHT * THRESHOLD_RANGE = 15 * 16 * 255. Since this number is excessively large, according to Breiman’s paper we will use the **square root** of this number.
+
+* Finally, if a tree leaf contains **more than one** training sample, we simply compute the **average** of the **2D gazes**, resulting in a 2D-gaze vector.
+
+* We do not limit the depth of each tree.
+
+* Based on the above, we calculate the **mean error** and the **standard deviation**.
+
+
+
+## References to literature/publications:
 
 [^1]: Breiman, L., Friedman, J.,Olshen, R., and Stone, C. [1984] Classification and Regression Trees,  Wadsworth
 [^2]: Y. Sugano, Y. Matsushita, and Y. Sato. Learning-by-synthesis for appearance-based 3d gaze estimation.
