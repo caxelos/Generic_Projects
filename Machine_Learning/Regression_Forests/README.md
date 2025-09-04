@@ -18,7 +18,7 @@
 - [2. Split data into clusters](#2-split-data-into-clusters)
 - [3. Training of Regression Forrest](#3-training-of-regression-forrest)
 	- [3.1 Training of each Tree](#31-training-of-each-tree)
-
+- [4. How is testing performed](#4-how-is-testing-performed)
 
 ## Overview
 * This project experiment on the hyperparameters of the algorithm **Regression Forrest** regarding the ***Gaze Recognition problem***.
@@ -139,7 +139,7 @@ $$
 
 
 
-## How we use a data sample to test our algorithmΠώς γίνεται το testing
+## 4. How is testing performed
 
 * When we want to test a sample, we do not send it to all the trees, but only to the **R-nearest trees** based on the head pose.
 
