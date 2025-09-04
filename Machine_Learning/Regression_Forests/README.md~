@@ -64,7 +64,7 @@ target="_blank">MPIIGaze Dataset</a> [^3]. However, there are also other dataset
 
 
 <div id="foto" style="text-align: center;">
-   <img src="../imgs/centers.jpg"  alt="foto1">
+   <img src="imgs/centers.jpg"  alt="foto1">
    <figcaption><i>Diagram illustrating the **Head Poses** of all points in the Training Phase. The cluster centers are shown in green, while the remaining points are shown in blue. The above figure uses **44,640** training samples, with the centers being at a distance **greater than 0.03** radians (1.718873 degrees) from each other.</i></figcaption>
 </div>
 
@@ -84,7 +84,7 @@ target="_blank">MPIIGaze Dataset</a> [^3]. However, there are also other dataset
 
 
 <div id="foto" style="text-align: center;">
-   <img src="../imgs/visualization.jpeg" width="400" alt="foto1">
+   <img src="imgs/visualization.jpeg" width="400" alt="foto1">
    <figcaption><i>Example where <b>neighbouring Clusters</b> contribute to the construction of a tree. The Clusters contain samples with <b>similar Head Poses</b></i></br></figcaption>
 </div>
 
@@ -131,7 +131,7 @@ $$
 * We choose **px1, px2 and thres*** that **minimize** the above sum.
 
 <div id="foto" style="text-align: center;">
-   <img src="../imgs/stigmiotupo.png" alt="foto1">
+   <img src="imgs/stigmiotupo.png" alt="foto1">
     <figcaption><i>Snapshot of a subtree with <b>10 samples</b>. Depending on the values of the samples's <b>Pixels</b>, it will be directed to a <b>terminal node</b>(leaf)</i></br></br> </figcaption>
 </div>
 
