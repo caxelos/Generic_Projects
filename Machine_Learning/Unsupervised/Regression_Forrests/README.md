@@ -1,29 +1,31 @@
 # Regression Forrests algorithm from Scratch in C 
 
 
-<html>
-<body style="background: url(/home/oly/MPIIGaze/markdown/gazeview.jpg) no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;">
-</body>
-</html>
-
-
-
+<p align="left">
+  <img src="imgs/regression_forrests.png" alt="???" width="450" height="400"/>
+</p>
 
 ## Experiment on ***Regression Forrest*** hyperparams for the Gaze Recognition problem
 
-## Overview of the project
-* Aim of this project are multiple:
-	- It began just to gain some experience in one of the best unsupervised algorithms, the Regression Forests.
-		- It is Regression instead of Decision, since our problem isn't classification but regression.
-  	- So the best way to learn it is to implement it "from scratch"/
-	- After implementing the prototype in Matlab, we moved forward with a multithreaded C/C++ version.
-	- Finally, we verify the correctness of our implementation with the accuracy that the bibliography achieves using the same algorithm/datasets.
+## Table of Contents
+- [Overview](#overview)
+- [1. Data Collection](#1-data-collection)
+- [2. Split data into clusters](#2-split-data-into-clusters)
+- [3. Training of Regression Forrest](#3-training-of-regression-forrest)
+	- [3.1 Each cluster is a tree](#31-each-cluster-is-a-tree)
+	- [3.2 Training of each Tree](#32-training-of-each-tree)
+	- [3.3 Pseudocode of hyperparameter calculation](#33-pseudocode-of-hyperparameter-calculation)	
+- [4. How is testing performed](#4-how-is-testing-performed)
+- [5 How to choose the hyperparameters of Regression Forrests](#5-how-to-choose-the-hyperparameters-of-regression-forrests)
+- [6 References to literature/publications](#6-references-to-literature-publications)
 
-## Step1: Data Collection
+## Overview
+* This project experiment on the hyperparameters of the algorithm **Regression Forrest** regarding the ***Gaze Recognition problem***.
+* Aim of this project are multiple. It began just to gain some experience in one of the best unsupervised algorithms, the Regression Forests. So the best way to learn it is to implement it "from scratch" (it is Regression instead of Decision, since our problem isn't classification but regression.)
+* After implementing the prototype in Matlab, we moved forward with a multithreaded C/C++ version in order to achieve parallelism.
+* Finally, we verify the correctness of our implementation with the accuracy that the bibliography achieves using the same algorithm/datasets.
+
+## 1. Data Collection
 
 * As data, we chose <a href="https://www.mpi-inf.mpg.de/de/abteilungen/computer-vision-and-multimodal-computing/research/gaze-based-human-computer-interaction/appearance-based-gaze-estimation-in-the-wild-mpiigaze/"
 target="_blank">MPIIGaze Dataset</a> [^3]. However, there are also other datasets, such as <a href="https://www.idiap.ch/dataset/eyediap" target="_blank">Eyediap</a> and <a href="http://www.hci.iis.u-tokyo.ac.jp/datasets/" target="_blank">Multiview Dataset</a> [^2].
@@ -46,15 +48,7 @@ target="_blank">MPIIGaze Dataset</a> [^3]. However, there are also other dataset
   	 - Both of these angles range within [-30, +30] degrees.
 * For the Random Forest algorithm, we reshape the eye images from (W,H) = (60,36) to (15,9) for both training and testing.
 
-
-
-
-
-
-
-
-
-## Step 2: Algorithm Implementation
+## 2. Split data into clusters
 
 * For the implementation of the algorithm, we based on Breiman's origin implementation [^1], making some changes to the way we choose the **features** during the split.
 * In our case, we first group the training samples into **P pose clusters**, based on the **Head Pose**:
@@ -65,18 +59,16 @@ target="_blank">MPIIGaze Dataset</a> [^3]. However, there are also other dataset
 
 <div id="foto" style="text-align: center;">
    <img src="imgs/centers.jpg"  alt="foto1">
-   <figcaption><i>Diagram illustrating the **Head Poses** of all points in the Training Phase. The cluster centers are shown in green, while the remaining points are shown in blue. The above figure uses **44,640** training samples, with the centers being at a distance **greater than 0.03** radians (1.718873 degrees) from each other.</i></figcaption>
+   <figcaption>Diagram illustrating the **Head Poses** of all points in the Training Phase. The cluster centers are shown in green, while the remaining points are shown in blue. The above figure uses **44,640** training samples, with the centers being at a distance **greater than 0.03** radians (1.718873 degrees) from each other.</figcaption>
 </div>
 
 
 
+## 3. Training of Regression Forrest 
 
-## Construction of the forest using Regression Decision Trees 
-
+### 3.1 Each cluster is a tree
 * I use the **bootstrap procedure**, randomly selecting inputs.
-
 * We create as many **trees** as there are **Pose Clusters**, that is, P.
-
 * Each tree receives training data from the **R-nearest Clusters**, i.e., the R clusters with the **closest Head Poses**
   με τα __κοντινότερα__ Head Poses
 * As the **error**, we take the **mean gaze error** from all the regression trees.
@@ -92,8 +84,7 @@ target="_blank">MPIIGaze Dataset</a> [^3]. However, there are also other dataset
 
 
 
-## Training of each Tree
-
+### 3.2 Training of each Tree
 
 * At **each node** of a tree, we try to **learn functions** of the form:
 
@@ -101,17 +92,13 @@ $$
     f = px1 - px2
 $$
 
-
-
-
 * Where, **px1, px2** are the ***Gray values*** of 2 pixels from the  eye Image (W=15,H=9).
-
 * These pixels are learned during training. We also try to learn the __optimal threshold__for each node, where:
 
 	a. if $$ __f < τ__ $$, then the training sample is directed to the __left subtree__.
 	b. if $$ __f >= τ__ $$, then the training sample is directed to the __right subtree__.
 
-
+### 3.3 Pseudocode of hyperparameter calculation
 * The algorithm we use to determine the **optimal pixels** and the **optimal threshold** for the split at **each node** of the tree is the **minimum residual sum of squares**.
 
 $$
@@ -151,7 +138,8 @@ $$
 
 
 
-## How we use a data sample to test our algorithmΠώς γίνεται το testing
+## 4. How is testing performed
+
 
 * When we want to test a sample, we do not send it to all the trees, but only to the **R-nearest trees** based on the head pose.
 
@@ -160,9 +148,8 @@ $$
 * We are also interested in the **standard deviation**, to see **how close** our predictions are to the **mean error**.
 
 
-## Evaluation of our algorithm
 
-
+### 5 How to choose the hyperparameters of Regression Forrests
 * During the detailed evaluation of the algorithm, we need to answer the following questions:
 
   1. What is the **optimal number of Clusters**, or equivalently, what is the **minimum possible distance** between two centers?
@@ -196,7 +183,7 @@ $$
 
 
 
-## References to literature/publications:
+### 6 References to literature/publications
 
 [^1]: Breiman, L., Friedman, J.,Olshen, R., and Stone, C. [1984] Classification and Regression Trees,  Wadsworth
 [^2]: Y. Sugano, Y. Matsushita, and Y. Sato. Learning-by-synthesis for appearance-based 3d gaze estimation.
