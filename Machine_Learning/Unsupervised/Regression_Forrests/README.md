@@ -2,10 +2,8 @@
 
 
 <p align="left">
-  <img src="imgs/regression_forrests.png" alt="???" width="450" height="400"/>
+  <img src="imgs/regression_forrests.png" alt="???" width="600" height="600"/>
 </p>
-
-## Experiment on ***Regression Forrest*** hyperparams for the Gaze Recognition problem
 
 ## Table of Contents
 - [Overview](#overview)
@@ -20,7 +18,7 @@
 - [6 References to literature/publications](#6-references-to-literature-publications)
 
 ## Overview
-* This project experiment on the hyperparameters of the algorithm **Regression Forrest** regarding the ***Gaze Recognition problem***.
+* This project experiments ***on the hyperparameters of the algorithm Regression Forrest***, as far as the **Gaze Recognition*** concern.
 * Aim of this project are multiple. It began just to gain some experience in one of the best unsupervised algorithms, the Regression Forests. So the best way to learn it is to implement it "from scratch" (it is Regression instead of Decision, since our problem isn't classification but regression.)
 * After implementing the prototype in Matlab, we moved forward with a multithreaded C/C++ version in order to achieve parallelism.
 * Finally, we verify the correctness of our implementation with the accuracy that the bibliography achieves using the same algorithm/datasets.
