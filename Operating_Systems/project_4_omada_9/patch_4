@@ -1,0 +1,239 @@
+diff -ruN linux-3.14.62-orig/block/clook-iosched.c linux-3.14.62-dev/block/clook-iosched.c
+--- linux-3.14.62-orig/block/clook-iosched.c	1969-12-31 16:00:00.000000000 -0800
++++ linux-3.14.62-dev/block/clook-iosched.c	2017-05-24 06:53:09.052480846 -0700
+@@ -0,0 +1,164 @@
++/*
++ * elevator noop
++ */
++#include <linux/blkdev.h>
++#include <linux/elevator.h>
++#include <linux/bio.h>
++#include <linux/module.h>
++#include <linux/slab.h>
++#include <linux/init.h>
++static sector_t thesi=-1;
++struct clook_data {
++	struct list_head queue;
++};
++
++static void clook_merged_requests(struct request_queue *q, struct request *rq,
++				 struct request *next)
++{
++	list_del_init(&next->queuelist);
++}
++
++static int clook_dispatch(struct request_queue *q, int force)
++{
++	struct clook_data *nd = q->elevator->elevator_data;
++	char 	dieuthinsi;
++	if (!list_empty(&nd->queue)) {
++	  struct request *rq;
++	  rq = list_entry(nd->queue.next, struct request, queuelist);
++	  thesi=rq->__sector;	
++	  list_del_init(&rq->queuelist);
++	  if(rq_data_dir(rq) == READ)
++	    dieuthinsi = 'R';
++	  else
++	    dieuthinsi = 'W';
++	  printk("[CLOOK] dsp %c %lu \n", dieuthinsi, rq->__sector);
++	  elv_dispatch_sort(q, rq);
++	  return 1;
++	}
++	return 0;
++}
++
++static void clook_add_request(struct request_queue *q, struct request *rq)
++{
++	struct clook_data *nd = q->elevator->elevator_data;
++	char 	dieuthinsi;
++	struct list_head *curr = NULL;
++	int flag=0;
++	int sec;
++	struct request *cur=NULL;
++	list_for_each(curr, &nd->queue){
++	  cur = list_entry(curr, struct request,queuelist);
++	  if(rq->__sector>thesi&&cur->__sector>thesi){
++	     if(rq->__sector<cur->__sector){
++	       flag=1;
++	       break;
++	     }
++	  }
++	  else if(rq->__sector>thesi&&cur->__sector<thesi){
++	     list_add_tail(&rq->queuelist,curr);
++	     flag=1;
++	     break;
++	  }
++	  else{
++	    if(rq->__sector<cur->__sector){
++	      flag=1;
++	      break;
++	    }
++	      
++	  }
++	}
++	if(flag==0){
++	  list_add_tail(&rq->queuelist, &nd->queue);
++	}
++	else
++	  list_add_tail(&rq->queuelist,curr);
++	if(rq_data_dir(rq) == READ)
++		dieuthinsi = 'R';
++	else
++		dieuthinsi = 'W';
++	printk("[CLOOK] add %c %lu\n", dieuthinsi, rq->__sector);
++}
++
++static struct request *
++clook_former_request(struct request_queue *q, struct request *rq)
++{
++	struct clook_data *nd = q->elevator->elevator_data;
++
++	if (rq->queuelist.prev == &nd->queue)
++		return NULL;
++	return list_entry(rq->queuelist.prev, struct request, queuelist);
++}
++
++static struct request *
++clook_latter_request(struct request_queue *q, struct request *rq)
++{
++	struct clook_data *nd = q->elevator->elevator_data;
++
++	if (rq->queuelist.next == &nd->queue)
++		return NULL;
++	return list_entry(rq->queuelist.next, struct request, queuelist);
++}
++
++static int clook_init_queue(struct request_queue *q, struct elevator_type *e)
++{
++	struct clook_data *nd;
++	struct elevator_queue *eq;
++
++	eq = elevator_alloc(q, e);
++	if (!eq)
++		return -ENOMEM;
++
++	nd = kmalloc_node(sizeof(*nd), GFP_KERNEL, q->node);
++	if (!nd) {
++		kobject_put(&eq->kobj);
++		return -ENOMEM;
++	}
++	eq->elevator_data = nd;
++
++	INIT_LIST_HEAD(&nd->queue);
++
++	spin_lock_irq(q->queue_lock);
++	q->elevator = eq;
++	spin_unlock_irq(q->queue_lock);
++	return 0;
++}
++
++static void clook_exit_queue(struct elevator_queue *e)
++{
++	struct clook_data *nd = e->elevator_data;
++
++	BUG_ON(!list_empty(&nd->queue));
++	kfree(nd);
++}
++
++static struct elevator_type elevator_clook = {
++	.ops = {
++		.elevator_merge_req_fn		= clook_merged_requests,
++		.elevator_dispatch_fn		= clook_dispatch,
++		.elevator_add_req_fn		= clook_add_request,
++		.elevator_former_req_fn		= clook_former_request,
++		.elevator_latter_req_fn		= clook_latter_request,
++		.elevator_init_fn		= clook_init_queue,
++		.elevator_exit_fn		= clook_exit_queue,
++	},
++	.elevator_name = "clook",
++	.elevator_owner = THIS_MODULE,
++};
++
++static int __init clook_init(void)
++{
++	return elv_register(&elevator_clook);
++}
++
++static void __exit clook_exit(void)
++{
++	elv_unregister(&elevator_clook);
++}
++
++module_init(clook_init);
++module_exit(clook_exit);
++
++
++MODULE_AUTHOR("Kontomitros Axelos Athanasiadis");
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("Clo-ok IO scheduler");
+diff -ruN linux-3.14.62-orig/block/Kconfig.iosched linux-3.14.62-dev/block/Kconfig.iosched
+--- linux-3.14.62-orig/block/Kconfig.iosched	2016-02-25 11:59:45.000000000 -0800
++++ linux-3.14.62-dev/block/Kconfig.iosched	2017-05-21 09:14:35.616197526 -0700
+@@ -38,6 +38,15 @@
+ 	default n
+ 	---help---
+ 	  Enable group IO scheduling in CFQ.
++config IOSCHED_CLOOK
++	tristate  "CLOOK I/O scheduler"
++        default y
++        ---help---
++          The no-op I/O scheduler is a minimal scheduler that does basic merging
++          and sorting. Its main uses include non-disk based block devices like
++          memory devices, and specialised software or hardware environments
++          that do their own scheduling and require only minimal assistance from
++          the kernel.
+ 
+ choice
+ 	prompt "Default I/O scheduler"
+@@ -48,6 +57,8 @@
+ 
+ 	config DEFAULT_DEADLINE
+ 		bool "Deadline" if IOSCHED_DEADLINE=y
++	config DEFAULT_CLOOK
++		bool "CLOOK" if IOSCHED_CLOOK=y	
+ 
+ 	config DEFAULT_CFQ
+ 		bool "CFQ" if IOSCHED_CFQ=y
+@@ -62,7 +73,7 @@
+ 	default "deadline" if DEFAULT_DEADLINE
+ 	default "cfq" if DEFAULT_CFQ
+ 	default "noop" if DEFAULT_NOOP
+-
++	default "clook" if DEFAULT_CLOOK
+ endmenu
+ 
+ endif
+diff -ruN linux-3.14.62-orig/block/Makefile linux-3.14.62-dev/block/Makefile
+--- linux-3.14.62-orig/block/Makefile	2016-02-25 11:59:45.000000000 -0800
++++ linux-3.14.62-dev/block/Makefile	2017-05-14 10:08:50.359841486 -0700
+@@ -16,7 +16,7 @@
+ obj-$(CONFIG_IOSCHED_NOOP)	+= noop-iosched.o
+ obj-$(CONFIG_IOSCHED_DEADLINE)	+= deadline-iosched.o
+ obj-$(CONFIG_IOSCHED_CFQ)	+= cfq-iosched.o
+-
++obj-$(CONFIG_IOSCHED_CLOOK) += clook-iosched.o
+ obj-$(CONFIG_BLOCK_COMPAT)	+= compat_ioctl.o
+ obj-$(CONFIG_BLK_DEV_INTEGRITY)	+= blk-integrity.o
+ obj-$(CONFIG_BLK_CMDLINE_PARSER)	+= cmdline-parser.o
+diff -ruN linux-3.14.62-orig/security/tomoyo/builtin-policy.h linux-3.14.62-dev/security/tomoyo/builtin-policy.h
+--- linux-3.14.62-orig/security/tomoyo/builtin-policy.h	1969-12-31 16:00:00.000000000 -0800
++++ linux-3.14.62-dev/security/tomoyo/builtin-policy.h	2017-05-20 09:59:46.067998864 -0700
+@@ -0,0 +1,12 @@
++static char tomoyo_builtin_profile[] __initdata =
++"";
++static char tomoyo_builtin_exception_policy[] __initdata =
++"initialize_domain /sbin/modprobe from any\n"
++"initialize_domain /sbin/hotplug from any\n"
++"";
++static char tomoyo_builtin_domain_policy[] __initdata =
++"";
++static char tomoyo_builtin_manager[] __initdata =
++"";
++static char tomoyo_builtin_stat[] __initdata =
++"";
+diff -ruN linux-3.14.62-orig/security/tomoyo/policy/exception_policy.conf linux-3.14.62-dev/security/tomoyo/policy/exception_policy.conf
+--- linux-3.14.62-orig/security/tomoyo/policy/exception_policy.conf	1969-12-31 16:00:00.000000000 -0800
++++ linux-3.14.62-dev/security/tomoyo/policy/exception_policy.conf	2017-05-20 09:59:45.915998867 -0700
+@@ -0,0 +1,2 @@
++initialize_domain /sbin/modprobe from any
++initialize_domain /sbin/hotplug from any

