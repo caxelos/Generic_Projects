@@ -93,11 +93,7 @@ $$
     f = px1 - px2
 $$
 
-
-
-
 * Where, **px1, px2** are the ***Gray values*** of 2 pixels from the  eye Image (W=15,H=9).
-
 * These pixels are learned during training. We also try to learn the __optimal threshold__for each node, where:
 
 	a. if $$ __f < τ__ $$, then the training sample is directed to the __left subtree__.
