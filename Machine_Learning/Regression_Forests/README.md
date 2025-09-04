@@ -1,4 +1,4 @@
-# Implementation of Regression Forrests algorithm from Scratch in C and Matlab languages
+# Implementation of Regression Forrests algorithm from Scratch in C 
 
 
 <html>
@@ -13,57 +13,55 @@
 
 
 
-Πειραματική εξέταση του Αλγορίθμου ***Regression Forrests__ στο πρόβλημα του Gaze Recognition
+## Experiment on ***Regression Forrest*** hyperparams for the Gaze Recognition problem
 
 
-## Δεδομένα
+## Step1: Data Collection
 
-* Ως δεδομένα επέλεξα το <a href="https://www.mpi-inf.mpg.de/de/abteilungen/computer-vision-and-multimodal-computing/research/gaze-based-human-computer-interaction/appearance-based-gaze-estimation-in-the-wild-mpiigaze/"
-target="_blank">MPIIGaze Dataset</a> [^3]. Ωστόσο υπάρχουν κι'άλλα dataset, όπως το <a href="https://www.idiap.ch/dataset/eyediap" target="_blank">Eyediap</a> και το <a href="http://www.hci.iis.u-tokyo.ac.jp/datasets/" target="_blank">Multiview Dataset</a> [^2].
+* As data, we chose <a href="https://www.mpi-inf.mpg.de/de/abteilungen/computer-vision-and-multimodal-computing/research/gaze-based-human-computer-interaction/appearance-based-gaze-estimation-in-the-wild-mpiigaze/"
+target="_blank">MPIIGaze Dataset</a> [^3]. However, there are also other datasets, such as <a href="https://www.idiap.ch/dataset/eyediap" target="_blank">Eyediap</a> and <a href="http://www.hci.iis.u-tokyo.ac.jp/datasets/" target="_blank">Multiview Dataset</a> [^2].
 
-
-* Οι αρχικές εικόνες έχουνε κανονικοποιηθεί με τέτοιο τρόπο, ώστε να εξετάζονται όλες οι εικόνες υπό τις __ίδιες συνθήκες__ .Επίσης κάθε μάτι εξετάζεται __ανεξάρτητα__ από το άλλο.
-
-
-* Τα δεδομένα που έχουμε στην διάθεση μας είναι:
-
-	1. Οι εικόνες __e__ του κάθε ματιού με διαστάσεις (W,H) = (60,36)
-
-	2. __Ηead Pose__, 2d διάνυσμα γωνιών σε radians(γωνία Theta και γωνία
-Phi)
-
-	3. __Gaze__(2d διάνυσμα επίσης σε radians) το όποιο προσπαθούμε να κάνουμε predict. Κάθε μάτι γίνεται predict __ανεξάρτητα__ από το άλλο
-
-	4. Η γωνία __Theta__ εκφράζει την οριζόντια θέση του κεφαλιού. Για
-παράδειγμα αν το κεφάλι έχει προσανατολισμό  προς τα __δεξιά__, θα έχει
-__θετική__ τιμή, ενώ αν κοιτάει προς τα __αριστερά__, θα έχει __αρνητική__.
-
-	5. Η γωνία __Phi__ λειτουργεί σαν την Theta, αλλά για τον κάθετο άξονα.
-Για παράδειγμα, αν το κεφάλι έχει προσανατολισμό προς τα __πάνω__, θα έχει
-__θετική τιμή__, ενώ αν κοιτάει προς τα __κάτω__, θα έχει __αρνητική__
-
-	6. Και οι 2 αυτές γωνίες κυμαίνονται στο διάστημα [-30, +30] σε
-__μοίρες__
+	- The original images habe been normalized in such a way that all images are examined ***under the same conditions***.
+	- In addition, each eye is analyzed ***independently*** from the other.
 
 
-* Για τον αλγόριθμο Random Forest, κάνουμε __reshape__ τις εικόνες των ματιών
-  από (W,H) = (__60,36__) σε (__15,9__) τόσο για το __training__, όσο και για το __testing__  
+* The data we have at our disposal are:
+
+	- The images of each eye with dimensions ***(WIDTH,HEIGHT)*** = **(60,36)**
+	- ***Ηead Pose***, a 2D vector of angles **in radians** (Theta angle and Phi angle)
+	- ***Gaze*** (also a 2D vector in radians), which we try to predict. Each eye is predicted **independently** of the other.
+
+* Explanation of angles **Theta** and **Phi**
+	- The **Theta angle** represents the ***horizontal orientation of the head***:
+		- For example, if the head is facing to the right, it will have a positive value, while if it is facing to the left, it will have a negative value.
+  	- The ***Phi angle** works like Theta, but for the vertical axis:
+  		- For example, if the head is tilted upwards, it will have a positive value, while if it is tilted downwards, it will have a negative value.
+  	 - Both of these angles range within [-30, +30] degrees.
+* For the Random Forest algorithm, we reshape the eye images from (W,H) = (60,36) to (15,9) for both training and testing.
 
 
 
 
 
-## Υλοποίηση Αλγορίθμου
-
-* Για την υλοποίηση του  αλγορίθμου, βασίστηκα στην αρχική υλοποίηση του Breiman[^1], κάνοντας κάποιες αλλαγές στον τρόπο που διαλέγουμε τα __features__ κατά το split
 
 
 
 
+## Step 2: Algorithm Implementation
 
-## Ομαδοποίηση των δεδομένων με βάση τα Head Poses
+* For the implementation of the algorithm, we based on Breiman's origin implementation [^1], making some changes to the way we choose the **features** during the split.
+* In our case, we first group the training samples into **P pose clusters**, based on the **Head Pose**:
+	- Each Cluster has a center, which consists of a vector (theta, phi).
+	- For a vector (theta, phi) to be considered the center of a Cluster, it must not be at a distance smaller than X from the already existing centers (e.g., in the following figure I use X = 0.08 and 106 Clusters are created).
+	- The smaller the value of X, the more Clusters are created.
 
-* Για την υλοποίηση του  αλγορίθμου, αρχικά ομαδοποιούμε τα training samples σε __P pose clusters__, με βάση το __Head Pose__
+
+
+
+
+
+
+
 
 
 * Κάθε Cluster έχει ένα __κέντρο__, το οποίο αποτελείται από ένα διάνυσμα
