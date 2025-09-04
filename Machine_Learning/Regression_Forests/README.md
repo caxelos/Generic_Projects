@@ -63,25 +63,8 @@ target="_blank">MPIIGaze Dataset</a> [^3]. However, there are also other dataset
 	- The smaller the value of X, the more Clusters are created.
 
 
-
-
-
-
-
-
-
-
-* Κάθε Cluster έχει ένα __κέντρο__, το οποίο αποτελείται από ένα διάνυσμα
-  (__theta, phi__)
-
-* Για να θεωρηθεί ένα διανύσμα (__theta, phi__) ως κέντρο ενός Cluster, θα πρέπει να __μην απέχει__ απόσταση μικρότερη από __Χ__ από τα ήδη υπάρχοντα κέντρα(πχ στο παρακάτω σχήμα χρησιμοποιώ __Χ=0.08__ και δημιουργούνται __106 Clusters__).
-
-* Όσο __μικρότερο__ το Χ, τόσο πιο __πολλά__ Clusters δημιουργούνται
-
-
-
 <div id="foto" style="text-align: center;">
-   <img src="centers.jpg"  alt="foto1">
+   <img src="imgs/centers.jpg"  alt="foto1">
    <figcaption><i>Diagram illustrating the **Head Poses** of all points in the Training Phase. The cluster centers are shown in green, while the remaining points are shown in blue. The above figure uses **44,640** training samples, with the centers being at a distance **greater than 0.03** radians (1.718873 degrees) from each other.</i></figcaption>
 </div>
 
@@ -101,7 +84,7 @@ target="_blank">MPIIGaze Dataset</a> [^3]. However, there are also other dataset
 
 
 <div id="foto" style="text-align: center;">
-   <img src="visualization.jpeg" width="400" alt="foto1">
+   <img src="imgs/visualization.jpeg" width="400" alt="foto1">
    <figcaption><i>Example where <b>neighbouring Clusters</b> contribute to the construction of a tree. The Clusters contain samples with <b>similar Head Poses</b></i></br></figcaption>
 </div>
 
@@ -148,7 +131,7 @@ $$
 * We choose **px1, px2 and thres*** that **minimize** the above sum.
 
 <div id="foto" style="text-align: center;">
-   <img src="stigmiotupo.png" alt="foto1">
+   <img src="imgs/stigmiotupo.png" alt="foto1">
     <figcaption><i>Snapshot of a subtree with <b>10 samples</b>. Depending on the values of the samples's <b>Pixels</b>, it will be directed to a <b>terminal node</b>(leaf)</i></br></br> </figcaption>
 </div>
 
@@ -168,8 +151,7 @@ $$
 
 
 
-## Πώς γίνεται το testing
-
+## How we use a data sample to test our algorithmΠώς γίνεται το testing
 
 * When we want to test a sample, we do not send it to all the trees, but only to the **R-nearest trees** based on the head pose.
 
@@ -178,8 +160,7 @@ $$
 * We are also interested in the **standard deviation**, to see **how close** our predictions are to the **mean error**.
 
 
-## Πειραματική Αξιολόγηση Αλγορίθμου
-
+## Evaluation of our algorithm
 
 
 * During the detailed evaluation of the algorithm, we need to answer the following questions:
