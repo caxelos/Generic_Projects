@@ -17,6 +17,8 @@
 - [1. Data Collection](#1-data-collection)
 - [2. Algorithm Implementation](#2-algorithm-implementation)
 - [3. Training of Regression Forrest](#3-training-of-regression-forrest)
+	- [3.1 Training of each Tree](#31-training-of-each-tree)
+
 
 ## Overview
 * This project experiment on the hyperparameters of the algorithm **Regression Forrest** regarding the ***Gaze Recognition problem***.
@@ -82,7 +84,7 @@ target="_blank">MPIIGaze Dataset</a> [^3]. However, there are also other dataset
 
 
 
-## Training of each Tree
+### 3.1 Training of each Tree
 
 
 * At **each node** of a tree, we try to **learn functions** of the form:
