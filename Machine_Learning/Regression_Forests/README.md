@@ -24,12 +24,9 @@
 
 
 ## Overview of the project
-* Aim of this project are multiple:
-	- It began just to gain some experience in one of the best unsupervised algorithms, the Regression Forests.
-		- It is Regression instead of Decision, since our problem isn't classification but regression.
-  	- So the best way to learn it is to implement it "from scratch"/
-	- After implementing the prototype in Matlab, we moved forward with a multithreaded C/C++ version.
-	- Finally, we verify the correctness of our implementation with the accuracy that the bibliography achieves using the same algorithm/datasets.
+* Aim of this project are multiple. It began just to gain some experience in one of the best unsupervised algorithms, the Regression Forests. So the best way to learn it is to implement it "from scratch" (it is Regression instead of Decision, since our problem isn't classification but regression.)
+* After implementing the prototype in Matlab, we moved forward with a multithreaded C/C++ version in order to achieve parallelism.
+* Finally, we verify the correctness of our implementation with the accuracy that the bibliography achieves using the same algorithm/datasets.
 
 ## Step1: Data Collection
 
