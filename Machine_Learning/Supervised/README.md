@@ -1,2 +1,2 @@
-Several projects regarding supervised machine learning algorithms (e.g. Neural Nets)
+Several projects regarding supervised machine learning algorithms (e.g. Neural Nets, Resnets)
 
