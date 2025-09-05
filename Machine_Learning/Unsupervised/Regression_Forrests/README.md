@@ -100,18 +100,10 @@ $$
 
 $$
 \begin{align}
- error =
- \sum_{\substack{i:f_{j}\lt{thres}}}^{nleft}  (g_{i} - \hat{ m_{left} } )^2 + \sum_{\substack{i:f_{j}\ge{thres}}}^{nright} (g_{i} - \hat{ m_{right} } )^2
-
-\end{align}
-$$
-
-$$
-\begin{align}
-\text{error} \;=\; 
+\text{error} \=\ 
 \sum_{ \substack{ i : f_{j} < \text{thres} } }^{n_{\text{left}}} 
 \left( g_{i} - \hat{m}_{\text{left}} \right)^2 
-\;+\; 
+\+\ 
 \sum_{ \substack{ i : f_{j} \geq \text{thres} } }^{n_{\text{right}}} 
 \left( g_{i} - \hat{m}_{\text{right}} \right)^2
 \end{align}
