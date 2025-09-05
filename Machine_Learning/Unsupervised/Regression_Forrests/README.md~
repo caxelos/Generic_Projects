@@ -68,6 +68,7 @@ target="_blank">MPIIGaze Dataset</a> [^3]. However, there are also other dataset
 * I use the **bootstrap procedure**, randomly selecting inputs.
 * We create as many **trees** as there are **Pose Clusters**, that is, P.
 * Each tree receives training data from the **R-nearest Clusters**, i.e., the R clusters with the **closest Head Poses**
+  με τα __κοντινότερα__ Head Poses
 * As the **error**, we take the **mean gaze error** from all the regression trees.
 
 
@@ -103,17 +104,6 @@ $$
  error =
  \sum_{\substack{i:f_{j}\lt{thres}}}^{nleft}  (g_{i} - \hat{ m_{left} } )^2 + \sum_{\substack{i:f_{j}\ge{thres}}}^{nright} (g_{i} - \hat{ m_{right} } )^2
 
-\end{align}
-$$
-
-$$
-\begin{align}
-\text{error} \;=\; 
-\sum_{ \substack{ i : f_{j} < \text{thres} } }^{n_{\text{left}}} 
-\left( g_{i} - \hat{m}_{\text{left}} \right)^2 
-\;+\; 
-\sum_{ \substack{ i : f_{j} \geq \text{thres} } }^{n_{\text{right}}} 
-\left( g_{i} - \hat{m}_{\text{right}} \right)^2
 \end{align}
 $$
 
