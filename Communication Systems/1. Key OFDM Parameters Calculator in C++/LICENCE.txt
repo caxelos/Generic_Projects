@@ -1,0 +1,13 @@
+
+---
+
+### **2. LICENSE.txt (Optional)**
+
+```text
+Copyright (c) 2025 Christos Axelos
+
+Permission is granted to view, compile, and run this code solely for 
+the purpose of evaluating my skills during the recruitment process. 
+Any other use is strictly prohibited.
+
+THE CODE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
