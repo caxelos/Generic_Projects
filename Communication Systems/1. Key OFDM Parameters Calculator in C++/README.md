@@ -19,6 +19,7 @@
     - [1.3.3 Normal Cyclic Prefix's Duration](#133-normal-cyclic-prefixs-duration)
 - [3. C++](#3-c)
 - [4. Testing](#4-testing)
+- [Compile](compile)
 
 ## Overview
 * In this project, we calculate the OFDM Numerology parameters for 5G New Radio (NR).
