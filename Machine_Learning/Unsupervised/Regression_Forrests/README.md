@@ -2,7 +2,7 @@
 
 
 <p align="left">
-  <img src="imgs/regression_forrests.png" alt="???" width="600" height="600"/>
+  <img src="imgs/regression_forrests.png" alt="???" width="700" height="700"/>
 </p>
 
 ## Table of Contents
