@@ -82,7 +82,7 @@
   - void get_m_index_from_user(void);
   - void compute_params(void);
   - void print_params();
- * You can easily call these functions, after an "OFDM" object.
+ * You can easily call these functions, after creating an **OFDM** object.
 
 ## 4. Testing
 * TODO, have to do some Unit Testing.
