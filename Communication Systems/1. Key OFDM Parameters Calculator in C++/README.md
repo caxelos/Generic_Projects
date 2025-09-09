@@ -76,10 +76,12 @@
 ## 3. C++
 * Right now, our object-oriented implementation in C++ implements the following private functions:
   - set_subcarrier_spacing_in_kHz();
+  - set_num_of_subcarriers();
   - set_num_of_slots_per_frame_and_subframe();
   - set_slot_duration_in_ms();
   - set_symbol_duration_in_us();
   - set_cyclic_prefix_duration_in_us();
+  - set_number_of_physical_resource_blocks();
 * The public ones are the following:      
   - void get_carrier_bandwidth_MHz_from_user(void);
   - void get_m_index_from_user(void);
