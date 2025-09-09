@@ -64,6 +64,18 @@ void OFDM::set_subcarrier_spacing_in_kHz(void) {
 }
 
 
+/* Number of Subcarrier calculation
+ * Requirement:
+ *      - TODO
+ * Comment:
+ *      - Note: This is an approximation. In practice, the standard defines channel-edge guard bands 
+ *         and discrete PRB sizes, so the actual number of subcarriers may be slightly less. 
+ */
+void OFDM::set_num_of_subcarriers(void) {
+    this->numOfSubcarriers = static_cast<unsigned short>(std::floor(  (this->bandwidthMHz * 1000) / this->subcarrierSpacing_kHz));
+}
+
+
 /* Slots per subframe and frame
 
     Requirements:
@@ -85,7 +97,7 @@ void OFDM::set_slot_duration_in_ms(void) {
 }
 
 
-/* OFDM Symbol Duration (without Cyclic Prefix) calculation
+/* OFDM Symbol Duration (Cyclic Prefix included) calculation
     Requirement: 
         1. [3GPP TS 38.211 §4.3] TODO
     Comment:
@@ -95,9 +107,9 @@ void OFDM::set_slot_duration_in_ms(void) {
         - Substitute the CYCLIC_PREFIX_TIME=0us with the real equation.
 */
 void OFDM::set_symbol_duration_in_us(void) {
-    this->symbolDuration_us = (1 + CYCLIC_PREFIX_FACTOR) * (1e3 / this->subcarrierSpacing_kHz);
+    this->symbolDurationWithoutCyclicPrefix_us = 1e3 / this->subcarrierSpacing_kHz;
+    this->symbolDurationWithCyclicPrefix_us = (1 + CYCLIC_PREFIX_FACTOR) * this->symbolDurationWithoutCyclicPrefix_us;
 }
-
 
 /* OFDM Cyclic Prefix Duration calculation
     Requirement: 
@@ -106,7 +118,15 @@ void OFDM::set_symbol_duration_in_us(void) {
         - For simplicity reasons, I used 25% as CYCLIC_PREFIX_FACTOR
 */
 void OFDM::set_cyclic_prefix_duration_in_us(void) {
-    this->symbolDuration_us = CYCLIC_PREFIX_FACTOR * (1e3 / this->subcarrierSpacing_kHz);
+    this->cyclicPrefixDuration_us = CYCLIC_PREFIX_FACTOR * (1e3 / this->subcarrierSpacing_kHz);
+}
+
+
+/*
+ *
+ */
+void OFDM::set_number_of_physical_resource_blocks(void) {
+    this->n_PRB = this->numOfSubcarriers / NUM_OF_SUBCARRIERS_PER_PHYSICAL_RESOURCE_BLOCK;
 }
 
 /* Compute all OFDM params
@@ -123,10 +143,12 @@ void OFDM::set_cyclic_prefix_duration_in_us(void) {
 */
 void OFDM::compute_params(void) {
     this->set_subcarrier_spacing_in_kHz();
+    this->set_num_of_subcarriers();
     this->set_num_of_slots_per_frame_and_subframe();
     this->set_slot_duration_in_ms();
     this->set_symbol_duration_in_us();
     this->set_cyclic_prefix_duration_in_us();
+    this->set_number_of_physical_resource_blocks();
 }
 
 
@@ -141,15 +163,18 @@ void OFDM::print_params(void) {
     std::cout << "\tNumerology m-index: " << this->m_index << "\n";
     std::cout << "\tSubcarrier Spacing: " << this->subcarrierSpacing_kHz << " kHz\n";
     
-    std::cout << "Slots/Symbols:\n";
+    std::cout << "Subcarriers/Slots/Symbols:\n";
+    std::cout << "\tNumber of Physical Resource Blocks: " << this->n_PRB << "\n";
+    std::cout << "\tNumber of Subcarriers: " << this->numOfSubcarriers << "\n";
     std::cout << "\tSlots per Frame: " << this->slotsPerFrame << "\n";
     std::cout << "\tSlots per Subframe: " << this->slotsPerSubframe << "\n";
     std::cout << "\tSymbols per Slot: " << this->symbolsPerSlot << "\n";
     
     std::cout << "Timings:\n";
     std::cout << "\tSlot Duration: " << this->slotDuration_ms << " ms\n";
-    std::cout << "\tSymbol Duration: " << this->symbolDuration_us << " us\n";
-    std::cout << "\tCyclic Prefix Duration:  " << this->cyclicPrefixDuration_us << " us\n";
+    std::cout << "\tSymbol Duration (Cyclic Prefix included): " << this->symbolDurationWithCyclicPrefix_us << " us\n";
+    std::cout << "\tSymbol Duration (Without Cyclic Prefix): " << this->symbolDurationWithoutCyclicPrefix_us << " us\n";
+    std::cout << "\tCyclic Prefix Duration: " << this->cyclicPrefixDuration_us << " us\n";
     std::cout << "===============================\n";
 
 }
