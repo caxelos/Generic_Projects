@@ -25,7 +25,7 @@
 * In this project, we calculate the OFDM Numerology parameters for 5G New Radio (NR).
 * The user gives in **command line** the  **numerology μ** [0, +4].
 * Then, we calculate and print the following OFMD parameters:
-  - The Carrier Bandwidth and the Subcarrier spacing (Δf).
+  - The Carrier Bandwidth, the Subcarrier spacing (Δf) and the number of Subcarriers.
   - Number of Slots per Frame/Subframe and Symbols per Slot.
   - Duration of Slots & Symbols
 
