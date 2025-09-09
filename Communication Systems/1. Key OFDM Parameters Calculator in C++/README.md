@@ -18,8 +18,10 @@
     - [1.3.2 Symbol's Duration](#132-symbols-duration)
     - [1.3.3 Normal Cyclic Prefix's Duration](#133-normal-cyclic-prefixs-duration)
 - [3. C++](#3-c)
+  - [3.1 Implemented Functions](#31-implemented-functions)
+  - [3.2 Compile](#32-compile)
 - [4. Testing](#4-testing)
-- [Compile](compile)
+- [References to Literature / Publications](#references-to-literature--publications)
 
 ## Overview
 * In this project, we calculate the OFDM Numerology parameters for 5G New Radio (NR).
@@ -74,6 +76,7 @@
   * By Including Cyclic prefix we ***prevent inter-symbol interference*** (ISI).
 
 ## 3. C++
+### 3.1 Implemented Functions
 * Right now, our object-oriented implementation in C++ implements the following private functions:
   - set_subcarrier_spacing_in_kHz();
   - set_num_of_subcarriers();
@@ -89,15 +92,17 @@
   - void print_params();
  * You can easily call these functions, after creating an **OFDM** object.
 
-## 4. Testing
-* TODO, use some framework to perform Unit Testing in our C++ functions.
-    
-## Compile
+### 3.2 Compile
 To compile the project, use the commands in a **command promt**:
   -  `make` for building. It creates the **build** directory with the executable.
   -  `make clean`. It deletes the **build** directory, created during the compilation.
 
-### 6 References to literature/publications
+## 4. Testing
+* TODO, use some framework to perform Unit Testing in our C++ functions.
+    
+
+
+## References to Literature / Publications
 
 [^1]: TS 138 211 - V15.2.0 - 5G; NR; Physical channels and modulation (3GPP TS 38.211 version 15.2.0 Release 15)
 [^2]: Stefano Cioni, Nicolò Mazzali, Alberto Ginesi - Cyclic Prefix Reduction for 5G Non-Terrestrial Networks (2025)
