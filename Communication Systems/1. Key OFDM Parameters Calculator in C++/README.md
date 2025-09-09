@@ -85,7 +85,7 @@
  * You can easily call these functions, after creating an **OFDM** object.
 
 ## 4. Testing
-* TODO, have to do some Unit Testing.
+* TODO, use some framework to perform Unit Testing in our C++ functions.
     
 ## Compile
 To compile the project, use the commands in a **command promt**:
