@@ -11,7 +11,7 @@
 - [Overview](#overview)
 - [1. Specification](#1-specification)
   - [Reference Documentation & Requirements](#reference-documentation--requirements)
-  - [1.1 Numerology μ and Subcarrier Spacing](#11-numerology-μ-and-subcarrier-spacing)
+  - [1.1 Numerology μ, subcarrier spacing, num of Subcarriers](#11-numerology-μ-subcarrier-spacing-num-of-subcarriers)
   - [1.2 Number of Slots per Frame/Subframe and Symbols per Slot](#12-number-of-slots-per-framesubframe-and-symbols-per-slot)
   - [1.3 Time Duration of Slots & Symbols](#13-time-duration-of-slots--symbols)
     - [1.3.1 Slot's Duration](#131-slots-duration)
@@ -25,7 +25,7 @@
 * In this project, we calculate the OFDM Numerology parameters for 5G New Radio (NR).
 * The user gives in **command line** the  **numerology μ** [0, +4].
 * Then, we calculate and print the following OFMD parameters:
-  - The Carrier Bandwidth and the Subcarrier spacing (Δf).
+  - The Carrier Bandwidth, the Subcarrier spacing (Δf) and the number of Subcarriers.
   - Number of Slots per Frame/Subframe and Symbols per Slot.
   - Duration of Slots & Symbols
 
@@ -38,13 +38,16 @@
 * In our case, we use [version 18.5.0](https://standards.iteh.ai/catalog/standards/etsi/d9f7d06f-f6f0-40f3-8ef7-cb0ef6805e37/etsi-ts-138-211-v18-5-0-2025-01?utm_source=chatgpt.com) of 3GPP TS 38.211.
 
   
-### 1.1 Numerology μ and Subcarrier Spacing
+### 1.1 Numerology μ, subcarrier spacing, num of Subcarriers
 * We take the **numerology μ** as input from the user (value in domain [0, +4]).<br>
   According to **Section 4.2** of GPP TS 38.211[^1],  "***μ and the cyclic prefix for a bandwidth part are obtained from the higher-layer parameter***". 
 * Given the numerology μ:
   - We can calculate the ***number of slots per 1ms subframe***, which is **$$2^\mu$$**.
   - We can also calculate the ***Subcarrier spacing***, according to **Section 4.2** of GPP TS 38.211[^1].<br>
   "***The subcarrier spacing Δf is defined as*** 15 × $$2^\mu$$ ***kHz, where μ is the numerology index***".
+* At this point, we can approximate ***the number of subcarriers*** that fit in the carrier:
+  - Convert bandwidth to kHz: $BW_{\text{kHz}} = BW\ (\text{MHz}) \times 1000$
+  - Estimate number of subcarriers as: $N_{\text{sub}} \approx \left\lfloor \frac{BW_{\text{kHz}}}{\Delta f} \right\rfloor$
 
 ### 1.2 Number of Slots per Frame/Subframe and Symbols per Slot
   * As we mentioned in 1.1, the ***number of slots per each 1ms subframe*** is **$$2^\mu$$**.
@@ -63,7 +66,7 @@
 #### 1.3.2 Symbol's Duration
   * In case of 5G NR, **Symbol's duration** is equivalent to "the ***period of the slowest subcarrier (= 1/Δf)***" plus "***a fraction of this period***",
       - This fraction can usually be, e.g. 1/4, 1/8, 1/16, 1/32).
-      - For simplicity, we'll keep it for this project as a **constant value, equal to zero**.
+      - For simplicity, we'll keep it for this project as a **constant value, equal to 10% of Symbol's duration**.
 
 #### 1.3.3 Normal Cyclic Prefix's Duration
   * Although in 1.3.3 we provide an estimation, in general here we calculate the exact time of Normal Cyclic Prefix Duration.
