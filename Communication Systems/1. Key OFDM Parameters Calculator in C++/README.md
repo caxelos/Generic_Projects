@@ -67,7 +67,7 @@
 
 #### 1.3.3 Normal Cyclic Prefix's Duration
   * Although in 1.3.3 we provide an estimation, in general here we calculate the exact time of Normal Cyclic Prefix Duration.
-  * According to [1, 2], the cyclic prefix duration is given by $T_{\mathrm{CP}} = 144 \cdot 64 \cdot 2^{-\mu} \cdot T_s$, where $\( T_c = \frac{1}{480 \cdot 10^3 \cdot 4096} = 0.509 \,\text{ns} \)$
+  * According to [^1], [^2], the cyclic prefix duration is given by $T_{\mathrm{CP}} = 144 \cdot 64 \cdot 2^{-\mu} \cdot T_s$, where $\( T_c = \frac{1}{480 \cdot 10^3 \cdot 4096} = 0.509 \,\text{ns} \)$
   * By Including Cyclic prefix we ***prevent inter-symbol interference*** (ISI).
 
 ## 3. C++
@@ -83,6 +83,6 @@ To compile the project, use the commands in a **command promt**:
 
 ### 6 References to literature/publications
 
-[^1]: (TS 138 211 - V15.2.0 - 5G; NR; Physical channels and modulation (3GPP TS 38.211 version 15.2.0 Release 15)
+[^1]: TS 138 211 - V15.2.0 - 5G; NR; Physical channels and modulation (3GPP TS 38.211 version 15.2.0 Release 15
 [^2]: Stefano Cioni, Nicolò Mazzali, Alberto Ginesi - Cyclic Prefix Reduction for 5G Non-Terrestrial Networks (2025)
 
