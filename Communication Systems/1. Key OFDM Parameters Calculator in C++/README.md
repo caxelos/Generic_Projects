@@ -71,10 +71,21 @@
   * By Including Cyclic prefix we ***prevent inter-symbol interference*** (ISI).
 
 ## 3. C++
-* TODO
+* Right now, our object-oriented implementation in C++ implements the following private functions:
+  - set_subcarrier_spacing_in_kHz();
+  - set_num_of_slots_per_frame_and_subframe();
+  - set_slot_duration_in_ms();
+  - set_symbol_duration_in_us();
+  - set_cyclic_prefix_duration_in_us();
+* The public ones are the following:      
+  - void get_carrier_bandwidth_MHz_from_user(void);
+  - void get_m_index_from_user(void);
+  - void compute_params(void);
+  - void print_params();
+ * You can easily call these functions, after an "OFDM" object.
 
 ## 4. Testing
-* TODO, add some Unit Testing
+* TODO, have to do some Unit Testing.
     
 ## Compile
 To compile the project, use the commands in a **command promt**:
@@ -83,6 +94,5 @@ To compile the project, use the commands in a **command promt**:
 
 ### 6 References to literature/publications
 
-[^1]: TS 138 211 - V15.2.0 - 5G; NR; Physical channels and modulation (3GPP TS 38.211 version 15.2.0 Release 15
+[^1]: TS 138 211 - V15.2.0 - 5G; NR; Physical channels and modulation (3GPP TS 38.211 version 15.2.0 Release 15)
 [^2]: Stefano Cioni, Nicolò Mazzali, Alberto Ginesi - Cyclic Prefix Reduction for 5G Non-Terrestrial Networks (2025)
-
