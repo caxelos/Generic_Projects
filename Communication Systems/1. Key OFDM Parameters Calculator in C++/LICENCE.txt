@@ -1,6 +1,6 @@
 Recruitment Evaluation License
 
-Copyright (c) 2025 [Your Name]. All rights reserved.
+Copyright (c) 2025 Christos Axelos. All rights reserved.
 
 This code is provided solely for the purpose of evaluating my technical skills 
 as part of a recruitment or hiring process.
