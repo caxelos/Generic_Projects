@@ -66,7 +66,7 @@
 #### 1.3.2 Symbol's Duration
   * In case of 5G NR, **Symbol's duration** is equivalent to "the ***period of the slowest subcarrier (= 1/Δf)***" plus "***a fraction of this period***",
       - This fraction can usually be, e.g. 1/4, 1/8, 1/16, 1/32).
-      - For simplicity, we'll keep it for this project as a **constant value, equal to zero**.
+      - For simplicity, we'll keep it for this project as a **constant value, equal to 10% of Symbol's duration**.
 
 #### 1.3.3 Normal Cyclic Prefix's Duration
   * Although in 1.3.3 we provide an estimation, in general here we calculate the exact time of Normal Cyclic Prefix Duration.
