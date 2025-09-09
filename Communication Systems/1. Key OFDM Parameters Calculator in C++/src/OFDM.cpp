@@ -1,8 +1,7 @@
 /*
- * Copyright (c) 2025 Christos Axelos
- *
- * This code is provided solely for evaluating my skills as part of
- * the recruitment process. Unauthorized use or distribution is prohibited.
+ * Copyright (c) 2025 Christos Axelos.  
+ * Provided solely for recruitment evaluation.  
+ * See LICENSE.txt for full terms.
  */
 #include "OFDM.hpp"
 #include <iomanip>

@@ -1,4 +1,7 @@
-# //© 2025 Christos Axelos. All rights reserved.
+# Copyright (c) 2025 Christos Axelos.  
+# Provided solely for recruitment evaluation.  
+# See LICENSE.txt for full terms.
+
 
 # Makefile
 

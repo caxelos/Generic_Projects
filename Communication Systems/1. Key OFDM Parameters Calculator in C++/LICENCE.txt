@@ -1,13 +1,16 @@
+Recruitment Evaluation License
 
----
+Copyright (c) 2025 [Your Name]. All rights reserved.
 
-### **2. LICENSE.txt (Optional)**
+This code is provided solely for the purpose of evaluating my technical skills 
+as part of a recruitment or hiring process.
 
-```text
-Copyright (c) 2025 Christos Axelos
+You are granted a limited, non-transferable, and non-exclusive right to:
+- Review, compile, and execute the code for evaluation purposes only.
 
-Permission is granted to view, compile, and run this code solely for 
-the purpose of evaluating my skills during the recruitment process. 
-Any other use is strictly prohibited.
+You are not authorized to:
+- Use this code in production or commercial environments,
+- Modify or distribute this code outside the evaluation context, or
+- Claim ownership or authorship of this code.
 
-THE CODE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
+Any use of this code beyond the scope of evaluation requires my prior written permission.
