@@ -137,15 +137,20 @@ void OFDM::compute_params(void) {
 void OFDM::print_params(void) {
 
     std::cout << std::fixed << std::setprecision(2);
-    std::cout << "===== OFDM Configuration =====\n";
-    std::cout << "Numerology μ: " << this->m_index << "\n";
-    std::cout << "Subcarrier Spacing: " << this->subcarrierSpacing_kHz << " kHz\n";
-    std::cout << "Slots per Frame: " << this->slotsPerFrame << "\n";
-    std::cout << "Slots per Subframe: " << this->slotsPerSubframe << "\n";
-    std::cout << "Symbols per Slot: " << this->symbolsPerSlot << "\n";
-    std::cout << "Slot Duration: " << this->slotDuration_ms << " ms\n";
-    std::cout << "Symbol Duration: " << this->symbolDuration_us << " µs\n";
-    std::cout << "Cyclic Prefix Duration:  " << this->cyclicPrefixDuration_us << " µs\n";
+    std::cout << "\n===== OFDM Configuration =====\n\n";
+    std::cout << "Inputs:\n";
+    std::cout << "\tNumerology m-index: " << this->m_index << "\n";
+    std::cout << "\tSubcarrier Spacing: " << this->subcarrierSpacing_kHz << " kHz\n";
+    
+    std::cout << "Slots/Symbols:\n";
+    std::cout << "\tSlots per Frame: " << this->slotsPerFrame << "\n";
+    std::cout << "\tSlots per Subframe: " << this->slotsPerSubframe << "\n";
+    std::cout << "\tSymbols per Slot: " << this->symbolsPerSlot << "\n";
+    
+    std::cout << "Timings:\n";
+    std::cout << "\tSlot Duration: " << this->slotDuration_ms << " ms\n";
+    std::cout << "\tSymbol Duration: " << this->symbolDuration_us << " us\n";
+    std::cout << "\tCyclic Prefix Duration:  " << this->cyclicPrefixDuration_us << " us\n";
     std::cout << "===============================\n";
 
 }
